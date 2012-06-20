@@ -2,20 +2,24 @@ package
 {
 	import org.flixel.*;
 
+	/**
+	 * Unsure whether I need this class at all..
+	 */
+
 	public class Grid
 	{
 		public var debugLines:Boolean = true;
 
 		private var _grid:Array = [];
+		public function get grid():Array { return _grid; }
 
 		public function Grid( width:int, height:int, pxSize:int = 16 )
 		{
-			createGrid();
+			recreateGrid();
 		}
 
-		public function createGrid( width:int, height:int, pxSize:int = 16 ):void
+		public function recreateGrid( width:int, height:int, pxSize:int = 16 ):void
 		{
-			// work out how many we can make in x/y
 			var numX:int = width / pxSize;
 			var numY:int = height / pxSize;
 
@@ -26,7 +30,7 @@ package
 				{
 					yArray.push(0);
 				}
-				_grid.
+				_grid.push(yArray);
 			}
 		}
 

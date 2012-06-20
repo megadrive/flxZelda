@@ -1,0 +1,17 @@
+# Taken from github.com/github/gitignore/blob/master/Actionscript.ignore
+
+# Build and Release Folders
+bin/
+bin-debug/
+bin-release/
+
+# Project property files
+.actionScriptProperties
+.flexProperties
+.settings/
+.project
+
+# Custom for FlashDevelop/My own sanity
+lib/
+obj/
+.swf
