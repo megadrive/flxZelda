@@ -43,15 +43,5 @@ package
 				this.x += 1;
 			}
 		}
-
-		public function isObstacleInWay(dir:uint, group:FlxGroup):Boolean
-		{
-			if(dir == UP)
-			{
-
-			}
-
-			return false;
-		}
 	}
 }
