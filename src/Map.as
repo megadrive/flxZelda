@@ -19,7 +19,7 @@ package
 			xml = Utilities.getXML(map);
 			
 			var tiles:XML = xml.Tiles[0];
-			this.loadMap(tiles, Assets.DUNGEON_01_GFX, 16, 16);
+			this.loadMap(tiles, Assets.DUNGEON_01_GFX, 16, 16, OFF, 0, 0, 1);
 		}
 	}
 }
