@@ -17,13 +17,14 @@ package
 			add(_map);
 			
 			add(player);
+			player.x = FlxG.width / 2;
+			player.y = FlxG.height / 2;
 		}
 
 		override public function update():void
 		{
 			super.update();
-
-			FlxG.collide(player, walls);
+			FlxG.collide(player, _map.collidables);
 		}
 	}
 }
