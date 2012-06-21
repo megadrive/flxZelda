@@ -11,7 +11,7 @@ package
 		{
 			super(160, 128, PlayState, 3);
 
-			//showFlixelPauseScreen = false;
+			showPause = false;
 		}
 	}
 }

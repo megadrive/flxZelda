@@ -15,7 +15,7 @@ package org.flixel
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
-	
+
 	import org.flixel.plugin.TimerManager;
 	import org.flixel.system.FlxDebugger;
 	import org.flixel.system.FlxReplay;
@@ -25,7 +25,7 @@ package org.flixel
 	 * It is a long and sloppy file that you shouldn't have to worry about too much!
 	 * It is basically only used to create your game object in the first place,
 	 * after that FlxG and FlxState have all the useful stuff you actually need.
-	 * 
+	 *
 	 * @author	Adam Atomic
 	 */
 	public class FlxGame extends Sprite
@@ -35,10 +35,22 @@ package org.flixel
 		[Embed(source="data/logo.png")] protected var ImgLogo:Class;
 
 		/**
+		 * A toggle to use the big pause screen or not.
+		 * @default true
+		 */
+		public var showPause:Boolean;
+
+		/**
+		 * If set to false, doesn't load the focus screen at all, giving no effect to showPause.
+		 */
+		protected var initFocusScreen:Boolean;
+
+		/**
 		 * Sets 0, -, and + to control the global volume sound volume.
 		 * @default true
 		 */
 		public var useSoundHotKeys:Boolean;
+
 		/**
 		 * Tells flixel to use the default system mouse cursor instead of custom Flixel mouse cursors.
 		 * @default false
@@ -59,7 +71,7 @@ package org.flixel
 		 * Mouse cursor.
 		 */
 		internal var _mouse:Sprite;
-		
+
 		/**
 		 * Class type of the initial/first game state for the game, usually MenuState or something like that.
 		 */
@@ -68,7 +80,7 @@ package org.flixel
 		 * Whether the game object's basic initialization has finished yet.
 		 */
 		protected var _created:Boolean;
-		
+
 		/**
 		 * Total number of milliseconds elapsed since game start.
 		 */
@@ -128,7 +140,7 @@ package org.flixel
 		 * A handy boolean that keeps track of whether the debugger exists and is currently visible.
 		 */
 		internal var _debuggerUp:Boolean;
-		
+
 		/**
 		 * Container for a game replay object.
 		 */
@@ -165,7 +177,7 @@ package org.flixel
 
 		/**
 		 * Instantiate a new game object.
-		 * 
+		 *
 		 * @param	GameSizeX		The width of your game in game pixels, not necessarily final display pixels (see Zoom).
 		 * @param	GameSizeY		The height of your game in game pixels, not necessarily final display pixels (see Zoom).
 		 * @param	InitialState	The class name of the state you want to create and switch to first (e.g. MenuState).
@@ -182,7 +194,7 @@ package org.flixel
 			_focus.visible = false;
 			_soundTray = new Sprite();
 			_mouse = new Sprite()
-			
+
 			//basic display and update setup stuff
 			FlxG.init(this,GameSizeX,GameSizeY,Zoom);
 			FlxG.framerate = GameFramerate;
@@ -196,14 +208,17 @@ package org.flixel
 				flash.ui.Mouse.hide();
 			forceDebugger = false;
 			_debuggerUp = false;
-			
+
+			initFocusScreen = true;
+			showPause = true;
+
 			//replay data
 			_replay = new FlxReplay();
 			_replayRequested = false;
 			_recordingRequested = false;
 			_replaying = false;
 			_recording = false;
-			
+
 			//then get ready to create the game object for real
 			_iState = InitialState;
 			_requestedState = null;
@@ -211,10 +226,10 @@ package org.flixel
 			_created = false;
 			addEventListener(Event.ENTER_FRAME, create);
 		}
-		
+
 		/**
 		 * Makes the little volume tray slide out.
-		 * 
+		 *
 		 * @param	Silent	Whether or not it should beep.
 		 */
 		internal function showSoundTray(Silent:Boolean=false):void
@@ -236,7 +251,7 @@ package org.flixel
 
 		/**
 		 * Internal event handler for input and focus.
-		 * 
+		 *
 		 * @param	FlashEvent	Flash keyboard event.
 		 */
 		protected function onKeyUp(FlashEvent:KeyboardEvent):void
@@ -290,10 +305,10 @@ package org.flixel
 				return;
 			FlxG.keys.handleKeyUp(FlashEvent);
 		}
-		
+
 		/**
 		 * Internal event handler for input and focus.
-		 * 
+		 *
 		 * @param	FlashEvent	Flash keyboard event.
 		 */
 		protected function onKeyDown(FlashEvent:KeyboardEvent):void
@@ -325,10 +340,10 @@ package org.flixel
 			}
 			FlxG.keys.handleKeyDown(FlashEvent);
 		}
-		
+
 		/**
 		 * Internal event handler for input and focus.
-		 * 
+		 *
 		 * @param	FlashEvent	Flash mouse event.
 		 */
 		protected function onMouseDown(FlashEvent:MouseEvent):void
@@ -364,10 +379,10 @@ package org.flixel
 			}
 			FlxG.mouse.handleMouseDown(FlashEvent);
 		}
-		
+
 		/**
 		 * Internal event handler for input and focus.
-		 * 
+		 *
 		 * @param	FlashEvent	Flash mouse event.
 		 */
 		protected function onMouseUp(FlashEvent:MouseEvent):void
@@ -376,10 +391,10 @@ package org.flixel
 				return;
 			FlxG.mouse.handleMouseUp(FlashEvent);
 		}
-		
+
 		/**
 		 * Internal event handler for input and focus.
-		 * 
+		 *
 		 * @param	FlashEvent	Flash mouse event.
 		 */
 		protected function onMouseWheel(FlashEvent:MouseEvent):void
@@ -388,10 +403,10 @@ package org.flixel
 				return;
 			FlxG.mouse.handleMouseWheel(FlashEvent);
 		}
-		
+
 		/**
 		 * Internal event handler for input and focus.
-		 * 
+		 *
 		 * @param	FlashEvent	Flash event.
 		 */
 		protected function onFocus(FlashEvent:Event=null):void
@@ -403,10 +418,10 @@ package org.flixel
 			stage.frameRate = _flashFramerate;
 			FlxG.resumeSounds();
 		}
-		
+
 		/**
 		 * Internal event handler for input and focus.
-		 * 
+		 *
 		 * @param	FlashEvent	Flash event.
 		 */
 		protected function onFocusLost(FlashEvent:Event=null):void
@@ -417,18 +432,22 @@ package org.flixel
 				y = 0;
 			}
 			flash.ui.Mouse.show();
-			_lostFocus = _focus.visible = true;
+			_lostFocus = false;
+			if( showPause )
+			{
+				_focus.visible = true;
+			}
 			stage.frameRate = 10;
 			FlxG.pauseSounds();
 		}
-		
+
 		/**
 		 * Handles the onEnterFrame call and figures out how many updates and draw calls to do.
-		 * 
+		 *
 		 * @param	FlashEvent	Flash event.
 		 */
 		protected function onEnterFrame(FlashEvent:Event=null):void
-		{			
+		{
 			var mark:uint = getTimer();
 			var elapsedMS:uint = mark-_total;
 			_total = mark;
@@ -451,13 +470,13 @@ package org.flixel
 					while(_accumulator >= _step)
 					{
 						step();
-						_accumulator = _accumulator - _step; 
+						_accumulator = _accumulator - _step;
 					}
 				}
-				
+
 				FlxBasic._VISIBLECOUNT = 0;
 				draw();
-				
+
 				if(_debuggerUp)
 				{
 					_debugger.perf.flash(elapsedMS);
@@ -474,31 +493,31 @@ package org.flixel
 		 * and calls creates on the new state and plugs it into the game object.
 		 */
 		protected function switchState():void
-		{ 
+		{
 			//Basic reset stuff
 			FlxG.resetCameras();
 			FlxG.resetInput();
 			FlxG.destroySounds();
 			FlxG.clearBitmapCache();
-			
+
 			//Clear the debugger overlay's Watch window
 			if(_debugger != null)
 				_debugger.watch.removeAll();
-			
+
 			//Clear any timers left in the timer manager
 			var timerManager:TimerManager = FlxTimer.manager;
 			if(timerManager != null)
 				timerManager.clear();
-			
+
 			//Destroy the old state (if there is an old state)
 			if(_state != null)
 				_state.destroy();
-			
+
 			//Finally assign and create the new state
 			_state = _requestedState;
 			_state.create();
 		}
-		
+
 		/**
 		 * This is the main game update logic section.
 		 * The onEnterFrame() handler is in charge of calling this
@@ -516,7 +535,7 @@ package org.flixel
 				_replayCancelKeys = null;
 				FlxG.reset();
 			}
-			
+
 			//handle replay-related requests
 			if(_recordingRequested)
 			{
@@ -538,11 +557,11 @@ package org.flixel
 					_debugger.vcr.playing();
 				_replaying = true;
 			}
-			
+
 			//handle state switching requests
 			if(_state != _requestedState)
 				switchState();
-			
+
 			//finally actually step through the game physics
 			FlxBasic._ACTIVECOUNT = 0;
 			if(_replaying)
@@ -594,7 +613,7 @@ package org.flixel
 		protected function updateSoundTray(MS:Number):void
 		{
 			//animate stupid sound tray thing
-			
+
 			if(_soundTray != null)
 			{
 				if(_soundTrayTimer > 0)
@@ -605,7 +624,7 @@ package org.flixel
 					if(_soundTray.y <= -_soundTray.height)
 					{
 						_soundTray.visible = false;
-						
+
 						//Save sound preferences
 						var soundPrefs:FlxSave = new FlxSave();
 						if(soundPrefs.bind("flixel"))
@@ -620,25 +639,25 @@ package org.flixel
 				}
 			}
 		}
-		
+
 		/**
 		 * This function is called by step() and updates the actual game state.
 		 * May be called multiple times per "frame" or draw call.
 		 */
 		protected function update():void
-		{			
+		{
 			var mark:uint = getTimer();
-			
+
 			FlxG.elapsed = FlxG.timeScale*(_step/1000);
 			FlxG.updateSounds();
 			FlxG.updatePlugins();
 			_state.update();
 			FlxG.updateCameras();
-			
+
 			if(_debuggerUp)
 				_debugger.perf.flixelUpdate(getTimer()-mark);
 		}
-		
+
 		/**
 		 * Goes through the game state and draws all the game objects and special effects.
 		 */
@@ -652,10 +671,10 @@ package org.flixel
 			if(_debuggerUp)
 				_debugger.perf.flixelDraw(getTimer()-mark);
 		}
-		
+
 		/**
 		 * Used to instantiate the guts of the flixel game object once we have a valid reference to the root.
-		 * 
+		 *
 		 * @param	FlashEvent	Just a Flash system event, not too important for our purposes.
 		 */
 		protected function create(FlashEvent:Event):void
@@ -664,12 +683,12 @@ package org.flixel
 				return;
 			removeEventListener(Event.ENTER_FRAME, create);
 			_total = getTimer();
-			
+
 			//Set up the view window and double buffering
 			stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
             stage.frameRate = _flashFramerate;
-			
+
 			//Add basic input event listeners and mouse container
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
@@ -677,7 +696,7 @@ package org.flixel
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			addChild(_mouse);
-			
+
 			//Let mobile devs opt out of unnecessary overlays.
 			if(!FlxG.mobile)
 			{
@@ -687,20 +706,28 @@ package org.flixel
 					_debugger = new FlxDebugger(FlxG.width*FlxCamera.defaultZoom,FlxG.height*FlxCamera.defaultZoom);
 					addChild(_debugger);
 				}
-				
+
 				//Volume display tab
 				createSoundTray();
-				
+
 				//Focus gained/lost monitoring
 				stage.addEventListener(Event.DEACTIVATE, onFocusLost);
 				stage.addEventListener(Event.ACTIVATE, onFocus);
-				createFocusScreen();
+
+				if( initFocusScreen )
+				{
+					createFocusScreen();
+				}
+				else
+				{
+					showPause = false;
+				}
 			}
-			
+
 			//Finally, set up an event for the actual game loop stuff.
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
-		
+
 		/**
 		 * Sets up the "sound tray", the little volume meter that pops down sometimes.
 		 */
@@ -712,7 +739,7 @@ package org.flixel
 			var tmp:Bitmap = new Bitmap(new BitmapData(80,30,true,0x7F000000));
 			_soundTray.x = (FlxG.width/2)*FlxCamera.defaultZoom-(tmp.width/2)*_soundTray.scaleX;
 			_soundTray.addChild(tmp);
-			
+
 			var text:TextField = new TextField();
 			text.width = tmp.width;
 			text.height = tmp.height;
@@ -726,7 +753,7 @@ package org.flixel
 			_soundTray.addChild(text);
 			text.text = "VOLUME";
 			text.y = 16;
-			
+
 			var bx:uint = 10;
 			var by:uint = 14;
 			_soundTrayBars = new Array();
@@ -740,11 +767,11 @@ package org.flixel
 				bx += 6;
 				by--;
 			}
-			
+
 			_soundTray.y = -_soundTray.height;
 			_soundTray.visible = false;
 			addChild(_soundTray);
-			
+
 			//load saved sound preferences for this game if they exist
 			var soundPrefs:FlxSave = new FlxSave();
 			if(soundPrefs.bind("flixel") && (soundPrefs.data.sound != null))
@@ -756,7 +783,7 @@ package org.flixel
 				soundPrefs.destroy();
 			}
 		}
-		
+
 		/**
 		 * Sets up the darkened overlay with the big white "play" button that appears when a flixel game loses focus.
 		 */
@@ -765,7 +792,7 @@ package org.flixel
 			var gfx:Graphics = _focus.graphics;
 			var screenWidth:uint = FlxG.width*FlxCamera.defaultZoom;
 			var screenHeight:uint = FlxG.height*FlxCamera.defaultZoom;
-			
+
 			//draw transparent black backdrop
 			gfx.moveTo(0,0);
 			gfx.beginFill(0,0.5);
@@ -774,7 +801,7 @@ package org.flixel
 			gfx.lineTo(0,screenHeight);
 			gfx.lineTo(0,0);
 			gfx.endFill();
-			
+
 			//draw white arrow
 			var halfWidth:uint = screenWidth/2;
 			var halfHeight:uint = screenHeight/2;
@@ -785,7 +812,7 @@ package org.flixel
 			gfx.lineTo(halfWidth-helper,halfHeight+helper);
 			gfx.lineTo(halfWidth-helper,halfHeight-helper);
 			gfx.endFill();
-			
+
 			var logo:Bitmap = new ImgLogo();
 			logo.scaleX = int(helper/10);
 			if(logo.scaleX < 1)
