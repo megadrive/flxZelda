@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -rf bin/
+
 ~/.flex/bin/mxmlc -static-link-runtime-shared-libraries src/Main.as
 
 mkdir bin

@@ -9,7 +9,9 @@ package
 	{
 		public function Main()
 		{
-			super(480, 384, PlayState, 3);
+			super(160, 128, PlayState, 3);
+
+			//showFlixelPauseScreen = false;
 		}
 	}
 }
