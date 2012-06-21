@@ -17,6 +17,7 @@ package
 
 			player.x = FlxG.width / 2;
 			player.y = FlxG.height / 2;
+			player.currentMap = _map;
 			add(player);
 		}
 
