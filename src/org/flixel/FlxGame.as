@@ -41,16 +41,10 @@ package org.flixel
 		public var showPause:Boolean;
 
 		/**
-		 * If set to false, doesn't load the focus screen at all, giving no effect to showPause.
-		 */
-		protected var initFocusScreen:Boolean;
-
-		/**
 		 * Sets 0, -, and + to control the global volume sound volume.
 		 * @default true
 		 */
 		public var useSoundHotKeys:Boolean;
-
 		/**
 		 * Tells flixel to use the default system mouse cursor instead of custom Flixel mouse cursors.
 		 * @default false
@@ -208,8 +202,6 @@ package org.flixel
 				flash.ui.Mouse.hide();
 			forceDebugger = false;
 			_debuggerUp = false;
-
-			initFocusScreen = true;
 			showPause = true;
 
 			//replay data
@@ -713,15 +705,7 @@ package org.flixel
 				//Focus gained/lost monitoring
 				stage.addEventListener(Event.DEACTIVATE, onFocusLost);
 				stage.addEventListener(Event.ACTIVATE, onFocus);
-
-				if( initFocusScreen )
-				{
-					createFocusScreen();
-				}
-				else
-				{
-					showPause = false;
-				}
+				createFocusScreen();
 			}
 
 			//Finally, set up an event for the actual game loop stuff.
