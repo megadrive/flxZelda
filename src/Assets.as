@@ -1,5 +1,7 @@
 package
 {
+	import flash.display.Sprite;
+
 	/**
 	 * ...
 	 * @author Andrew Simeon
