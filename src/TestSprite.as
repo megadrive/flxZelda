@@ -48,25 +48,28 @@ package
 			dy = 0;
 			dx = 0;
 			
-			if( FlxG.keys.pressed(keyUp) || FlxG.keys.pressed(keyUpAlt) && !checkCollisionInNextMovementStep(UP) )
+			if( (FlxG.keys.pressed(keyUp) || FlxG.keys.pressed(keyUpAlt)) )
 			{
 				dy = -gridSize;
 			}
-			if( FlxG.keys.pressed(keyLeft) || FlxG.keys.pressed(keyLeftAlt) && !checkCollisionInNextMovementStep(LEFT) )
+			if( (FlxG.keys.pressed(keyLeft) || FlxG.keys.pressed(keyLeftAlt)) )
 			{
 				dx = -gridSize;
 			}
-			if( FlxG.keys.pressed(keyDown) || FlxG.keys.pressed(keyDownAlt) && !checkCollisionInNextMovementStep(DOWN) )
+			if( (FlxG.keys.pressed(keyDown) || FlxG.keys.pressed(keyDownAlt)) )
 			{
 				dy = gridSize;
 			}
-			if( FlxG.keys.pressed(keyRight) || FlxG.keys.pressed(keyRightAlt) && !checkCollisionInNextMovementStep(RIGHT) )
+			if( (FlxG.keys.pressed(keyRight) || FlxG.keys.pressed(keyRightAlt)) )
 			{
 				dx = gridSize;
 			}
 			
-			this.x += dx;
-			this.y += dy;
+			if ( !checkCollisionInNextMovementStep(dx, dy) )
+			{
+				this.x += dx;
+				this.y += dy;
+			}
 		}
 		
 		override public function update():void
@@ -84,30 +87,9 @@ package
 			if(timerVal % movementDelay == 0) moveUpdate();
 		}
 		
-		private function checkCollisionInNextMovementStep(dir:uint):Boolean
+		private function checkCollisionInNextMovementStep(dx:int, dy:int):Boolean
 		{
-			var obj:FlxObject = new FlxObject(x, y, 16, 16);
-			
-			if ( dir == UP )
-			{
-				obj.y -= gridSize;
-			}
-			
-			if ( dir == LEFT )
-			{
-				obj.x -= gridSize;
-			}
-			
-			if ( dir == RIGHT )
-			{
-				obj.x += gridSize;
-			}
-			
-			if ( dir == DOWN )
-			{
-				obj.y += gridSize;
-			}
-			
+			var obj:FlxObject = new FlxObject(x + dx, y + dy, 16, 16);			
 			return FlxG.overlap(obj, currentMap.collidables);
 		}
 	}
